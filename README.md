@@ -1,8 +1,6 @@
-# Git-GitHub-Zero-to-Hero
-
-
 
 # Git
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/git.png" alt="Banner" />
 
 ---
 
