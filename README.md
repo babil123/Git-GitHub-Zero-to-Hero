@@ -105,7 +105,7 @@ git config --global user.email "bubu@example.com"
 
 ## 5. Git Architecture
 
-<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/gitarchitecture.webp" alt="Banner" />
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/gitarchitecture.png" alt="Banner" />
 
 
 Git operates in **four main areas**:
