@@ -105,6 +105,9 @@ git config --global user.email "bubu@example.com"
 
 ## 5. Git Architecture
 
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/gitarchitecture.webp" alt="Banner" />
+
+
 Git operates in **four main areas**:
 
 1. **Working Directory (or Working Tree):**
@@ -339,6 +342,9 @@ Git automatically determines the most appropriate merge strategy based on the hi
 
 #### **A. Fast-Forward Merge**
 
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/fastforward.png" alt="Banner" />
+
+
 A fast-forward merge occurs when there is a **linear path** from the tip of the current branch (`target-branch`) to the tip of the branch being merged (`source-branch`).
 
   * **When it happens:** If the `target-branch` has not diverged (i.e., no new commits have been added since the `source-branch` was created), Git can simply move the pointer of the `target-branch` forward to the latest commit of the `source-branch`.
@@ -349,6 +355,8 @@ A fast-forward merge occurs when there is a **linear path** from the tip of the 
     ```
 
 #### **B. Three-Way (Recursive) Merge**
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/recursive.png" alt="Banner" />
+
 
 A three-way merge occurs when the branches have **diverged**—commits have been added to *both* the `target-branch` and the `source-branch` since they split from their common ancestor.
 
