@@ -482,5 +482,3 @@ git revert <commit_hash>
 * **Reset** rewrites history, **Revert** preserves it.
 
 ---
-
-👉 Bubu, do you want me to also create a **visual Git workflow diagram + branching strategy diagrams** (like Gitflow vs GitHub Flow) to make this a complete teaching resource for your students?
