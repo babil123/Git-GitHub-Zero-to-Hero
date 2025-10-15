@@ -7,15 +7,7 @@
 ## 1. What is a Version Control System (VCS)?
 
 * A **Version Control System** is software that records changes to files over time so you can recall specific versions later.
-* Think of it as a **time machine for your project**.
 * Without VCS, you’d manually create copies like `project_v1`, `project_final`, `project_final_final`, which quickly becomes chaotic.
-
-### Benefits
-
-* **Collaboration** – multiple developers can work together without overwriting each other’s changes.
-* **History Tracking** – see who changed what, when, and why.
-* **Rollback** – return to a previous stable version when needed.
-* **Branching** – experiment with features without affecting the main code.
 
 
 ## 2. Difference Between DVCS and CVCS
