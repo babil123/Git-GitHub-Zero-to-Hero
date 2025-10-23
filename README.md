@@ -187,10 +187,47 @@ These two Git commands are used to show differences (a "diff") between different
 | `git diff` | **Working Directory** vs. **Staging Area** (or Index) | The changes you have made to files since the last time you ran `git add` on them. These are your **unstaged changes**. |
 | `git diff --staged` | **Staging Area** (or Index) vs. **Last Commit** (`HEAD`) | The changes that have been added to the staging area (using `git add`) and are ready to be included in the next commit. These are your **staged changes**. |
 
-### Analogy:
+### brief:
 
-* `git diff` tells you: **"What's on my desk that I haven't put in the staging area yet?"** (Unstaged changes).
+* `git diff` : We use git diff to see what has changed in your project — line by line — before you commit or between different commits, branches, or files..
 * `git diff --staged` tells you: **"What's in the staging area that is ready to be committed and is different from the last shipped box?"** (Staged changes).
+
+
+### 🧱 **Git Areas and diff commands**
+
+```
+             ┌────────────────────────────┐
+             │        Repository          │
+             │     (Last commit - HEAD)   │
+             └────────────┬───────────────┘
+                          ▲
+                          │  git diff --staged
+                          │  (Staging area ↔ Repo)
+                          │
+             ┌────────────┴───────────────┐
+             │        Staging Area        │
+             │    (Files you git add-ed)  │
+             └────────────┬───────────────┘
+                          ▲
+                          │  git diff
+                          │  (Working dir ↔ Staging)
+                          │
+             ┌────────────┴───────────────┐
+             │     Working Directory      │
+             │  (Your actual files now)   │
+             └────────────────────────────┘
+```
+
+---
+
+### 💡 Summary
+
+| Command                             | Compares                               | Shows                                   |
+| ----------------------------------- | -------------------------------------- | --------------------------------------- |
+| `git diff`                          | Working Directory ↔ Staging Area       | What you **changed but not yet staged** |
+| `git diff --staged` (or `--cached`) | Staging Area ↔ Last Commit (HEAD)      | What you **staged for commit**          |
+
+
 
 
 ## 7. Branching in Git
