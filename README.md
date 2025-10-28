@@ -468,6 +468,285 @@ git rebase main
 
 ---
 
+# 🧰 **Git Stash**
+
+## 📘 **Definition**
+
+`git stash` is a command used to **temporarily save (or "stash") changes** in your working directory that are **not yet ready to be committed**, allowing you to work on something else (like switching branches) without losing your uncommitted work.
+
+Think of it like putting your ongoing work in a **“temporary locker”** — you can retrieve it later and continue from where you left off.
+
+---
+
+## 🧩 **When to Use Git Stash**
+
+You typically use `git stash` when:
+
+* You have **uncommitted changes** but need to **switch branches**.
+* You want to **pull updates** from remote but your working directory isn’t clean.
+* You want to **test something quickly** without committing your current modifications.
+* You need to **temporarily save work** for later.
+
+---
+
+## ⚙️ **How Git Stash Works**
+
+When you run `git stash`, Git:
+
+1. Takes the changes in:
+
+   * The **working directory** (unstaged changes)
+   * The **staging area** (staged changes)
+2. Saves them in a **new stash object** inside `.git/refs/stash`.
+3. Reverts your working directory to the **last committed state** (clean working tree).
+
+---
+
+## 💻 **Common Git Stash Commands**
+
+### 1. 🏁 **Save Changes to a Stash**
+
+```bash
+git stash
+```
+
+* Saves both **staged** and **unstaged** changes.
+* Does **not** stash untracked files (like new files not added with `git add`).
+
+You can give a description to your stash:
+
+```bash
+git stash save "WIP: fixing login bug"
+```
+
+or
+
+```bash
+git stash push -m "WIP: fixing login bug"
+```
+
+---
+
+### 2. 🆕 **Include Untracked Files**
+
+By default, `git stash` ignores untracked files.
+To stash them as well:
+
+```bash
+git stash -u
+```
+
+or
+
+```bash
+git stash --include-untracked
+```
+
+To also include ignored files (rarely needed):
+
+```bash
+git stash -a
+```
+
+or
+
+```bash
+git stash --all
+```
+
+---
+
+### 3. 📜 **List All Stashes**
+
+```bash
+git stash list
+```
+
+Output example:
+
+```
+stash@{0}: WIP on main: 34a9f12 Added login validation
+stash@{1}: On dev: WIP on API refactor
+```
+
+Each stash has:
+
+* An index (like `{0}`, `{1}`)
+* The branch it was created on
+* The commit reference
+
+---
+
+### 4. 🎒 **Apply a Stash**
+
+To reapply the most recent stash:
+
+```bash
+git stash apply
+```
+
+To apply a specific stash:
+
+```bash
+git stash apply stash@{2}
+```
+
+> ⚠️ `apply` does **not delete** the stash from the stash list.
+> If you want to both apply and remove it, use `pop`.
+
+---
+
+### 5. 🚀 **Apply and Remove a Stash**
+
+```bash
+git stash pop
+```
+
+or for a specific one:
+
+```bash
+git stash pop stash@{1}
+```
+
+This reapplies the changes and then **deletes** the stash entry.
+
+---
+
+### 6. ❌ **Delete a Specific Stash**
+
+```bash
+git stash drop stash@{0}
+```
+
+Removes that particular stash entry.
+
+---
+
+### 7. 🧹 **Clear All Stashes**
+
+```bash
+git stash clear
+```
+
+Deletes **all** stashed entries.
+⚠️ Use carefully — cannot be undone!
+
+---
+
+### 8. 🔍 **View Stashed Changes**
+
+To see what’s inside a stash:
+
+```bash
+git stash show
+```
+
+To see a detailed diff:
+
+```bash
+git stash show -p
+```
+
+---
+
+### 9. 🪄 **Create a Branch from a Stash**
+
+If your stashed work is large and you want to isolate it:
+
+```bash
+git stash branch fix-login-bug stash@{0}
+```
+
+This will:
+
+1. Create a **new branch** (`fix-login-bug`)
+2. **Apply** the stash on it
+3. **Remove** the stash entry automatically
+
+---
+
+## 🧠 **Internals**
+
+* Each stash is stored as **two commits** internally:
+
+  * One for the **working directory changes**
+  * One for the **staged changes**
+* These are stored in `.git/refs/stash` and linked as a stack structure.
+
+---
+
+## ⚡ **Example Workflow**
+
+Let’s say you’re on `main` working on a new feature:
+
+```bash
+# 1️⃣ Make some changes
+nano app.py
+
+# 2️⃣ Temporarily save your work
+git stash save "WIP: feature update"
+
+# 3️⃣ Switch branch safely
+git switch bugfix-branch
+
+# 4️⃣ Work and commit there
+git commit -m "Fixed production bug"
+
+# 5️⃣ Come back and restore your feature work
+git switch main
+git stash pop
+```
+
+
+## 🧩 **Real-World Use Cases**
+
+| Scenario                                             | Command to Use                     | Why                                       |
+| ---------------------------------------------------- | ---------------------------------- | ----------------------------------------- |
+| Need to switch branches but have uncommitted changes | `git stash`                        | Keeps your work safe and allows switching |
+| Want to stash new untracked files too                | `git stash -u`                     | Includes files not yet added              |
+| Want to test a different feature quickly             | `git stash save "temp changes"`    | Temporarily store ongoing code            |
+| Want to recover changes later                        | `git stash list` + `git stash pop` | Brings back stashed work                  |
+| Want to move stashed work to a new branch            | `git stash branch`                 | Creates an isolated workspace             |
+
+---
+
+## 🧾 **Key Differences: `stash apply` vs `stash pop`**
+
+| Command           | Reapplies Changes | Removes Stash | Use Case                                  |
+| ----------------- | ----------------- | ------------- | ----------------------------------------- |
+| `git stash apply` | ✅ Yes             | ❌ No          | When you want to keep the stash for reuse |
+| `git stash pop`   | ✅ Yes             | ✅ Yes         | When you’re done with that stash          |
+
+---
+
+## 🧠 **Pro Tips**
+
+* Use meaningful stash messages (`-m "WIP: Login page update"`) for easier tracking.
+* Use `git stash show -p > patch.diff` to export stashed changes.
+* Avoid excessive stashing — instead, commit to a temp branch if it’s long-term work.
+* Use `git stash --keep-index` if you want to stash only unstaged changes.
+
+---
+
+## 🏁 **Summary**
+
+| Action                   | Command                        |
+| ------------------------ | ------------------------------ |
+| Save work                | `git stash`                    |
+| Save with message        | `git stash push -m "message"`  |
+| Include untracked files  | `git stash -u`                 |
+| List stashes             | `git stash list`               |
+| Apply latest stash       | `git stash apply`              |
+| Apply and remove stash   | `git stash pop`                |
+| Delete specific stash    | `git stash drop stash@{n}`     |
+| Delete all stashes       | `git stash clear`              |
+| Create branch from stash | `git stash branch branch_name` |
+
+---
+
+Would you like me to create a **diagram** showing how `git stash` moves changes between working directory, staging area, and stash stack? It’s a great visual addition for your “Zero-to-Hero” repo.
+
+
 ## 9. Reset vs Revert
 
 ### `git reset`
