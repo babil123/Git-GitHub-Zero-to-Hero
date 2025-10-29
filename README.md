@@ -748,8 +748,6 @@ git stash pop
 
 ## 9. Reset vs Revert
 
-Excellent choice, Bubu 🔥 — `git reset` is one of those **must-master Git commands** that separates a beginner from a pro.
-
 ## 📘 **Definition**
 
 `git reset` is a command used to **move the current branch’s HEAD** (and optionally, the index and working directory) **to a specified commit**.
