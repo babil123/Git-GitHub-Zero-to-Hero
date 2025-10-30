@@ -1,4 +1,6 @@
 # 🧭 **GitHub**
+<img src="https://github.com/bhuvan-raj/Git-GitHub-Zero-to-Hero/blob/main/assets/github.png" alt="Banner" />
+
 
 **GitHub** is **primarily a Git repository hosting service** that allows developers to store, manage, and collaborate on code using the **Git version control system**.
 
