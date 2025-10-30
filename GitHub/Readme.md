@@ -402,4 +402,142 @@ When you want to contribute to a public project:
 | **GitHub Fork**     | Remote copy of someone else’s repository under your GitHub account. Independent control. |
 | **Common workflow** | Fork → Clone → Create branch → Commit → Push → Pull Request.                             |
 
+
+##  **How Git Authenticates to GitHub**
+
+When you push or pull from a **remote GitHub repository**, Git must authenticate who you are.
+
+Git can do this using several methods:
+
+| Method                     | Description                                                        |
+| -------------------------- | ------------------------------------------------------------------ |
+| **SSH keys**               | Most common and secure — uses a public/private key pair            |
+| **HTTPS + PAT**            | Uses a **Personal Access Token (PAT)** instead of a password       |
+| **GitHub CLI (`gh auth`)** | Uses the GitHub CLI tool to log in and manage tokens automatically |
+
+---
+
+## 🧩 2. **Why We Use PAT**
+
+A **Personal Access Token (PAT)** acts like a **password** for your Git operations over HTTPS, but it’s safer and can be **revoked anytime**.
+It’s used for:
+
+* `git push`, `git pull`, `git clone` over HTTPS
+* Authenticating GitHub Actions runners
+* API access
+
+---
+
+## ⚙️ 3. **Create a Personal Access Token (PAT)**
+
+1. Profile - Settings - Developer Settings - Personal Access Token
+2. Click **“Generate new token (classic)”**
+3. **Give it a name (e.g. *Git Push Token*)Set expiration (e.g. 90 days)Select required scopes:
+
+   * ✅ `repo` → for full access to your repositories
+   * ✅ `workflow` → if you’re using GitHub Actions
+4. Generate token and **copy it** (you won’t see it again)
+
+---
+
+## 🔑  **Connecting to GitHub Repo Using PAT**
+
+### ✅ Option 1: Using HTTPS with PAT
+
+When you first push or pull, Git will prompt for your credentials.
+
+Example workflow:
+
+```bash
+# Connect to remote repository
+git remote add origin https://github.com/bubu/myapp.git
+
+# Push code to remote
+git push -u origin main
+```
+
+When Git asks for:
+
+```
+Username: your_github_username
+Password: <paste your personal access token here>
+```
+
+That’s it ✅
+Git will authenticate using your PAT instead of your password.
+
+---
+
+### 💡 Option 2: Save PAT in Git Credential Manager (so you don’t retype)
+
+You can store your PAT securely using:
+
+```bash
+git config --global credential.helper store
+```
+
+Then, the next time you enter your PAT, Git will save it in `~/.git-credentials`.
+
+Example content:
+
+```
+https://username:TOKEN@github.com
+```
+
+If you’re on Linux and prefer a more secure option, use:
+
+```bash
+git config --global credential.helper cache
+```
+
+This caches your credentials for a few minutes (default 15 min).
+
+---
+
+### ✅ Option 3: Inline Authentication (Quick test)
+
+You can include the PAT directly in the remote URL (not recommended for production, but good for quick tests):
+
+```bash
+git remote add origin https://<USERNAME>:<PAT>@github.com/<USERNAME>/<REPO>.git
+```
+
+Example:
+
+```bash
+git remote add origin https://bubu:ghp_AbCdEfGhIjKlMnOpQrStUvWxYz1234567890@github.com/bubu/myapp.git
+```
+
+⚠️ **Warning:** This exposes your PAT in shell history. Avoid doing this on shared systems.
+
+---
+
+## 🧠 5. **Verify Authentication Works**
+
+```bash
+git remote -v
+git push -u origin main
+```
+
+If your PAT is valid and has the correct scope, the push will succeed:
+
+```
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (5/5), done.
+To https://github.com/bubu/myapp.git
+ * [new branch]      main -> main
+```
+
+---
+
+## 🧰 6. **Summary Table**
+
+| Action                | Command                                                          |
+| --------------------- | ---------------------------------------------------------------- |
+| Add remote repo       | `git remote add origin https://github.com/<username>/<repo>.git` |
+| Set credential helper | `git config --global credential.helper store`                    |
+| Push code             | `git push -u origin main`                                        |
+| Inline PAT (optional) | `https://<username>:<PAT>@github.com/<username>/<repo>.git`      |
+
 ---
