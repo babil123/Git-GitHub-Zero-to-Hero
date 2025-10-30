@@ -894,3 +894,132 @@ Restores to the state before your last reset.
 * For safer “undo” operations on **shared repos**, use `git revert` instead.
 
 ---
+
+## Git Revert
+
+**Definition:**
+`git revert` is a *safe* command used to **undo the effect of a specific commit** by creating a new commit that reverses the changes introduced by that commit.
+
+Unlike `git reset`, it **does not delete or remove commits** — instead, it adds a new one that cancels out the target commit’s changes.
+
+---
+
+### 🧩 **Key Concept**
+
+> `git revert` = “undo by doing more commits.”
+
+It’s like pressing **Ctrl+Z**, but instead of deleting history, you **record another action** that undoes the last one.
+
+---
+
+### ⚙️ **How it works**
+
+Suppose your commit history is:
+
+```
+A — B — C — D   ← HEAD (current branch)
+```
+
+If you run:
+
+```bash
+git revert B
+```
+
+Git creates a new commit `E` that *reverses* what `B` did.
+
+Now your history looks like:
+
+```
+A — B — C — D — E (Revert "B")
+```
+
+✅ `B` still exists in history
+✅ `E` undoes its changes safely
+
+---
+
+### 💻 **Example**
+
+```bash
+# Suppose your file has:
+echo "v1" > file.txt
+git add file.txt
+git commit -m "v1"
+
+echo "v2" >> file.txt
+git commit -am "v2"
+
+echo "v3" >> file.txt
+git commit -am "v3"
+
+# Now revert the commit "v2"
+git log --oneline  # note the commit hash for v2
+git revert <hash-of-v2>
+```
+
+If no conflict occurs, Git creates a new commit:
+
+```
+Revert "v2"
+```
+
+Now your file contains:
+
+```
+v1
+v3
+```
+
+---
+
+### ⚠️ **If a conflict occurs**
+
+* Git stops and marks the conflict area (<<<<<<< >>>>>>>)
+* You manually edit to fix it
+* Then run:
+
+  ```bash
+  git add <file>
+  git revert --continue
+  ```
+* Or cancel:
+
+  ```bash
+  git revert --abort
+  ```
+
+---
+
+### 🧠 **When to use `git revert`**
+
+| Situation                                               | Why use it                                 |
+| ------------------------------------------------------- | ------------------------------------------ |
+| You’ve pushed commits to a shared branch (e.g., `main`) | It preserves commit history                |
+| You want to undo a specific change safely               | It doesn’t rewrite history                 |
+| You’re collaborating and want transparency              | Other developers can see what was reverted |
+
+
+
+## ⚔️ ** Key Differences Between `git revert` and `git reset`**
+
+| Feature                     | `git revert`                                       | `git reset`                                        |
+| --------------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| **Purpose**                 | Creates a new commit that undoes a previous commit | Moves HEAD to a previous commit (rewrites history) |
+| **History**                 | Preserved (non-destructive)                        | Rewritten (destructive)                            |
+| **Safe on shared branches** | ✅ Yes                                              | ❌ No                                               |
+| **Creates new commit**      | ✅ Yes                                              | ❌ No (unless followed by new commit)               |
+| **Affects remote repo**     | Can be pushed safely                               | Dangerous if pushed (changes history)              |
+| **Undo specific commit**    | ✅ Yes                                              | Not easily (moves entire branch)                   |
+| **Best used for**           | Public repositories / collaborative work           | Local cleanup or private branches                  |
+
+
+## 🧠 **5. Summary in Plain English**
+
+* **`git revert`** → Safe, keeps history clean, creates a new “undo” commit.
+* **`git reset`** → Rewrites history, good for local changes before sharing.
+
+> ✅ Use `git revert` for *public/shared branches*.
+> ⚠️ Use `git reset` for *local cleanup before pushing*.
+
+---
